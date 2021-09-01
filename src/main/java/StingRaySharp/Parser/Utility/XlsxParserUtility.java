@@ -41,9 +41,11 @@ public class XlsxParserUtility {
 
         try {
             String inFile = "C:\\Users\\noman\\Desktop\\StartLienSummaryChart.xlsx";
+            String inFile2 = "C:\\Users\\noman\\Documents\\Varicent Start.xlsx";
+
             String outFile = "C:\\Users\\noman\\Desktop\\StartLienSummaryChart" + new Date().getMinutes() + "_" + new Date().getSeconds()
                     + ".xlsx";
-            readXlsx( inFile, outFile );
+            readXlsx( inFile2, outFile );
 
         } catch ( Exception e ) {
             // TODO: handle exception
@@ -75,16 +77,20 @@ public class XlsxParserUtility {
             List< String > innerList = new ArrayList<>();
 
             // For each row, iterate through each columns
-            Iterator< Cell > cellIterator = row.cellIterator();
-            while ( cellIterator.hasNext() ) {
 
-                Cell cell = cellIterator.next();
-
+            for ( int i = 0; i < 5; i++ ) {
+                Cell cell = row.getCell( i );
                 if ( !cell.toString().isEmpty() ) {
                     innerList.add( cell.toString() );
-                     System.out.println(cell.toString());
+                    System.out.println( cell.toString() );
                 }
             }
+
+            /*
+             Iterator< Cell > cellIterator = row.cellIterator(); 
+               while ( cellIterator.hasNext() ) {
+                Cell cell = cellIterator.next();
+            }*/
 
             if ( !innerList.isEmpty() ) {
                 myList.add( innerList );
@@ -93,13 +99,11 @@ public class XlsxParserUtility {
 
         myWorkBook.close();
 
-        
-       
-        System.out.println( "******************main list" );
-         System.out.println( objectMapper.writeValueAsString( myList ));
+        myList.remove( 0 );
+        myList.remove( 0 );
 
-        myList.remove( 0 );
-        myList.remove( 0 );
+        System.out.println( "******************main list" );
+        System.out.println( objectMapper.writeValueAsString( myList ) );
 
         List< Map< String, String > > rawDataList = new ArrayList<>();
 
@@ -114,15 +118,14 @@ public class XlsxParserUtility {
             String jurisdiction = innerDataList.get( 1 );
             String service = innerDataList.get( 2 );
             String dateThru = innerDataList.get( 3 );
-
             String results = "";
             try {
                 results = innerDataList.get( 4 );
             } catch ( Exception e ) {
-                results = null;
             }
+            String status = getStatusFromResults( results );
 
-      /*      System.out.println( debtrNames );
+            /*      System.out.println( debtrNames );
             System.out.println( jurisdiction );
             System.out.println( dateThru );
             System.out.println( results );
@@ -144,8 +147,6 @@ public class XlsxParserUtility {
                     finalJurisdictionSplit = localAreaName + " " + usps + "\n" + "(" + service.trim() + ")";
                 }
 
-                String status = getStatusFromResults( results );
-
                 rowInnerDataMap.put( "Debtor Name", debtrNames );
                 rowInnerDataMap.put( "Status", status );
                 rowInnerDataMap.put( "Jurisdiction", finalJurisdictionSplit );
@@ -155,13 +156,9 @@ public class XlsxParserUtility {
 
             rawDataList.add( rowInnerDataMap );
         }
-        
-        
-        
+
         System.out.println( "******************rawDataList" );
-        System.out.println( objectMapper.writeValueAsString( rawDataList ));
-        
-        
+        System.out.println( objectMapper.writeValueAsString( rawDataList ) );
 
         List< String > orderList = new ArrayList<>();
         Map< String, List< Map< String, String > > > finalRowDataMap = prepareFinalXlsxData( rawDataList, orderList );
@@ -172,7 +169,7 @@ public class XlsxParserUtility {
 
     private static String getStatusFromResults( String results ) {
         String status = "";
-        if ( results != null ) {
+        if ( results != null && !results.isEmpty() ) {
             boolean resultFind = true;
             String lines[] = results.split( "\\r?\\n" );
             for ( String resultsLines : lines ) {
@@ -206,20 +203,16 @@ public class XlsxParserUtility {
         List< Map< String, String > > preparedDebtorList = new ArrayList<>();
         getNextDebtorRecord( preparedDebtorList, rawDataList );
 
-        
-        
         System.out.println( "******************preparedDebtorList" );
-        System.out.println( objectMapper.writeValueAsString( preparedDebtorList ));
-        
-        
+        System.out.println( objectMapper.writeValueAsString( preparedDebtorList ) );
+
         int index = 1;
         Map< String, List< Map< String, String > > > finalRowDataMap = new HashMap<>();
         groupByState( preparedDebtorList, finalRowDataMap, index, orderList, null );
 
         System.out.println( "******************finalRowDataMap" );
-        System.out.println( objectMapper.writeValueAsString( finalRowDataMap ));
-        
-        
+        System.out.println( objectMapper.writeValueAsString( finalRowDataMap ) );
+
         return finalRowDataMap;
     }
 
