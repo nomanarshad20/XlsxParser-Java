@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import StingRaySharp.Parser.Utility.PdfToXlsxParserUtility;
 import StingRaySharp.Parser.Utility.XlsxParserUtility;
 
 public class XlsxFileGUI extends JFrame {
@@ -35,9 +36,9 @@ public class XlsxFileGUI extends JFrame {
     JPanel jPanel;
 
     /** The txt private key file. */
-    private TextField txtLicenseTemplate;
+    private TextField txtXlsxOne;
 
-    private TextField txtPrivateKeyFile;
+    private TextField txtPdfTwo;
 
     /** The filebytes. */
     byte[] filebytes = null;
@@ -51,69 +52,68 @@ public class XlsxFileGUI extends JFrame {
         jPanel = new JPanel();
         jPanel.setLayout( null );
 
-        /**
-         * First Row
-         */
-        JLabel lblLicenseTemplate = new JLabel( "Select Input Xlsx File" );
-        lblLicenseTemplate.setBounds( 10, 10, 190, 25 );
+        // first Row xlsx
+        JLabel xlsxJLable = new JLabel( "Select Input Xlsx File" );
+        xlsxJLable.setBounds( 10, 10, 190, 25 );
 
-        txtLicenseTemplate = new TextField( 20 );
-        txtLicenseTemplate.setBounds( 200, 10, 190, 26 );
+        txtXlsxOne = new TextField( 20 );
+        txtXlsxOne.setBounds( 200, 10, 190, 26 );
 
-        JButton btnBrowseLicenseTemplate = new JButton( "Browse" );
-        btnBrowseLicenseTemplate.setBounds( 400, 10, 80, 28 );
+        JButton browesXlsx = new JButton( "Browse" );
+        browesXlsx.setBounds( 400, 10, 80, 28 );
 
-        /**
-         * Second Row
-         */
+        JButton genrateXlsxOne = new JButton( "  Generate Xlsx/Xlsx  " );
+        genrateXlsxOne.setBounds( 500, 10, 150, 28 );
 
-        /*    
-        JLabel lblPrivateKeyFile = new JLabel( "Select Output Xlsx File Path" );
-        lblPrivateKeyFile.setBounds( 10, 40, 190, 25 );
-        
-        txtPrivateKeyFile = new TextField( 20 );
-        txtPrivateKeyFile.setBounds( 200, 40, 190, 26 );
-        
-        JButton btnBrowsePrivateKeyFile = new JButton( "Browse" );
-        btnBrowsePrivateKeyFile.setBounds( 400, 40, 80, 28 );
-        
-        */
+        // second row Pdf
+        JLabel pdfJLable = new JLabel( "Select Input Pdf File" );
+        pdfJLable.setBounds( 10, 40, 190, 25 );
 
-        /**
-         * 3rd Row
-         */
-        JButton btnSignLicense = new JButton( "  Generate Xlsx  " );
-        btnSignLicense.setBounds( 130, 80, 120, 28 );
+        txtPdfTwo = new TextField( 20 );
+        txtPdfTwo.setBounds( 200, 40, 190, 26 );
+
+        JButton browesPdf = new JButton( "Browse" );
+        browesPdf.setBounds( 400, 40, 80, 28 );
+
+        JButton genrateXlsxTwo = new JButton( "  Generate Pdf/Xlsx  " );
+        genrateXlsxTwo.setBounds( 500, 40, 150, 28 );
 
         JButton btnClose = new JButton( "Close" );
-        btnClose.setBounds( 300, 80, 80, 28 );
+        btnClose.setBounds( 300, 90, 80, 28 );
 
         /**
          * Add all components in JPanel
          */
-        jPanel.add( lblLicenseTemplate );
-        jPanel.add( txtLicenseTemplate );
-        jPanel.add( btnBrowseLicenseTemplate );
-        // jPanel.add( lblPrivateKeyFile );
-        // jPanel.add( txtPrivateKeyFile );
-        // jPanel.add( btnBrowsePrivateKeyFile );
-        jPanel.add( btnSignLicense );
+        // one
+        jPanel.add( xlsxJLable );
+        jPanel.add( txtXlsxOne );
+        jPanel.add( browesXlsx );
+        jPanel.add( genrateXlsxOne );
+
+        // two
+        jPanel.add( pdfJLable );
+        jPanel.add( txtPdfTwo );
+        jPanel.add( browesPdf );
+        jPanel.add( genrateXlsxTwo );
+
+        //
+
         jPanel.add( btnClose );
 
-        jPanel.setSize( 500, 250 );
+        jPanel.setSize( 700, 200 );
         jFrame.add( jPanel );
 
         /**
          * Set JFrame properties
          */
-        jFrame.setLocation( 750, 300 );
+        jFrame.setLocation( 650, 300 );
         jFrame.pack();
-        jFrame.setSize( 500, 250 );
-        jFrame.setTitle( "Xlsx Generator ( Telos Legal Corp )" );
+        jFrame.setSize( 700, 200 );
+        jFrame.setTitle( "Parser-Xlsx-Pdf( Telos Legal Corp )" );
         jFrame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
         jFrame.setVisible( true );
 
-        btnBrowseLicenseTemplate.addActionListener( new ActionListener() {
+        browesXlsx.addActionListener( new ActionListener() {
 
             @Override
             public void actionPerformed( ActionEvent arg0 ) {
@@ -123,31 +123,29 @@ public class XlsxFileGUI extends JFrame {
             }
         } );
 
-        /*      
-        btnBrowsePrivateKeyFile.addActionListener( new ActionListener() {
-        
+        browesPdf.addActionListener( new ActionListener() {
+
             @Override
             public void actionPerformed( ActionEvent arg0 ) {
-        
+
                 openForPfx();
-        
+
             }
         } );
-        */
 
-        btnSignLicense.addActionListener( new ActionListener() {
+        genrateXlsxOne.addActionListener( new ActionListener() {
 
             @Override
             public void actionPerformed( ActionEvent arg0 ) {
                 try {
                     // && ( !txtLicenseTemplate.getText().contains( ".xlsx" ) || !txtLicenseTemplate.getText().contains( ".XLSX" ) )
-                    if ( txtLicenseTemplate.getText() != null && !txtLicenseTemplate.getText().isEmpty() ) {
+                    if ( txtXlsxOne.getText() != null && !txtXlsxOne.getText().isEmpty() ) {
                         try {
 
-                            File file = new File( txtLicenseTemplate.getText() );
+                            File file = new File( txtXlsxOne.getText() );
                             String outFile = file.getParent() + File.separator + file.getName() + "_" + new Date().getTime() + "_.xlsx";
 
-                            String outputFilePath = XlsxParserUtility.readXlsx( txtLicenseTemplate.getText(), outFile );
+                            String outputFilePath = XlsxParserUtility.readXlsx( txtXlsxOne.getText(), outFile );
 
                             JOptionPane.showMessageDialog( null, FILE_SAVED_MESSAGE + outputFilePath );
                         } catch ( Exception e ) {
@@ -163,6 +161,31 @@ public class XlsxFileGUI extends JFrame {
                 }
             }
         } );
+
+        genrateXlsxTwo.addActionListener( new ActionListener() {
+
+            @Override
+            public void actionPerformed( ActionEvent arg0 ) {
+                try {
+                    // && ( !txtLicenseTemplate.getText().contains( ".xlsx" ) || !txtLicenseTemplate.getText().contains( ".XLSX" ) )
+                    if ( txtPdfTwo.getText() != null && !txtPdfTwo.getText().isEmpty() ) {
+                        try {
+                            String outputFilePath = PdfToXlsxParserUtility.createXlsxFromPdf( txtPdfTwo.getText() );
+                            JOptionPane.showMessageDialog( null, FILE_SAVED_MESSAGE + outputFilePath );
+                        } catch ( Exception e ) {
+                            JOptionPane.showMessageDialog( null, e.getMessage() );
+                        }
+
+                    } else {
+                        JOptionPane.showMessageDialog( null, "Please select Pdf File" );
+                    }
+
+                } catch ( Exception e ) {
+                    JOptionPane.showMessageDialog( null, EXCEPTION_POPUP_MESSAGE_PRE_FIX + e.getMessage() );
+                }
+            }
+        } );
+
         btnClose.addActionListener( new ActionListener() {
 
             @Override
@@ -180,7 +203,7 @@ public class XlsxFileGUI extends JFrame {
         int ret = chooser.showOpenDialog( null );
         if ( ret != JFileChooser.CANCEL_OPTION ) {
             File file = chooser.getSelectedFile();
-            txtLicenseTemplate.setText( file.getAbsolutePath() );
+            txtXlsxOne.setText( file.getAbsolutePath() );
         }
     }
 
@@ -192,7 +215,7 @@ public class XlsxFileGUI extends JFrame {
         int ret = chooser.showOpenDialog( null );
         if ( ret != JFileChooser.CANCEL_OPTION ) {
             File file = chooser.getSelectedFile();
-            txtPrivateKeyFile.setText( file.getAbsolutePath() );
+            txtPdfTwo.setText( file.getAbsolutePath() );
         }
     }
 
