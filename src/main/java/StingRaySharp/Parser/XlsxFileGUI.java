@@ -16,8 +16,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import StingRaySharp.Parser.Utility.PdfToXlsxParserUtility;
-import StingRaySharp.Parser.Utility.XlsxParserUtility;
+import StingRaySharp.Parser.Utility.UccPdfToXlsxParserUtility;
+import StingRaySharp.Parser.Utility.GoodWinXlsxParserUtility;
 
 public class XlsxFileGUI extends JFrame {
 
@@ -53,7 +53,7 @@ public class XlsxFileGUI extends JFrame {
         jPanel.setLayout( null );
 
         // first Row xlsx
-        JLabel xlsxJLable = new JLabel( "Select Input Xlsx File" );
+        JLabel xlsxJLable = new JLabel( "GOODWIN :: Select Input Xlsx File" );
         xlsxJLable.setBounds( 10, 10, 190, 25 );
 
         txtXlsxOne = new TextField( 20 );
@@ -66,7 +66,7 @@ public class XlsxFileGUI extends JFrame {
         genrateXlsxOne.setBounds( 500, 10, 150, 28 );
 
         // second row Pdf
-        JLabel pdfJLable = new JLabel( "Select Input Pdf File" );
+        JLabel pdfJLable = new JLabel( "UCC :: Select Input Pdf File" );
         pdfJLable.setBounds( 10, 40, 190, 25 );
 
         txtPdfTwo = new TextField( 20 );
@@ -145,7 +145,7 @@ public class XlsxFileGUI extends JFrame {
                             File file = new File( txtXlsxOne.getText() );
                             String outFile = file.getParent() + File.separator + file.getName() + "_" + new Date().getTime() + "_.xlsx";
 
-                            String outputFilePath = XlsxParserUtility.readXlsx( txtXlsxOne.getText(), outFile );
+                            String outputFilePath = GoodWinXlsxParserUtility.readXlsx( txtXlsxOne.getText(), outFile );
 
                             JOptionPane.showMessageDialog( null, FILE_SAVED_MESSAGE + outputFilePath );
                         } catch ( Exception e ) {
@@ -170,7 +170,7 @@ public class XlsxFileGUI extends JFrame {
                     // && ( !txtLicenseTemplate.getText().contains( ".xlsx" ) || !txtLicenseTemplate.getText().contains( ".XLSX" ) )
                     if ( txtPdfTwo.getText() != null && !txtPdfTwo.getText().isEmpty() ) {
                         try {
-                            String outputFilePath = PdfToXlsxParserUtility.createXlsxFromPdf( txtPdfTwo.getText() );
+                            String outputFilePath = UccPdfToXlsxParserUtility.createXlsxFromPdf( txtPdfTwo.getText() );
                             JOptionPane.showMessageDialog( null, FILE_SAVED_MESSAGE + outputFilePath );
                         } catch ( Exception e ) {
                             JOptionPane.showMessageDialog( null, e.getMessage() );

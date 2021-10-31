@@ -27,8 +27,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 
-public class PdfToXlsxParserUtility {
+public class UccPdfToXlsxParserUtility {
 
+    
     public static void main( String args[] ) {
 
         createXlsxFromPdf( "c:\\users\\noman\\desktop\\sample_info.pdf" );
@@ -66,7 +67,6 @@ public class PdfToXlsxParserUtility {
 
             List< Map< String, String > > recList = new ArrayList<>();
 
-            List< String > linesList = new ArrayList<>();
 
             Map< Integer, Map< String, String > > mapFinal = new HashMap<>();
             Map< String, String > map = new HashMap<>();
@@ -93,12 +93,12 @@ public class PdfToXlsxParserUtility {
                 {
 
                     if ( line.contains( PdfToXlsxEnums.TYPE_OF_SEARCH.getKey() ) ) {
-                        System.out.println( "$$$$$$$$$$$" );
+                       // System.out.println( "$$$$$$$$$$$" );
                         System.out.println( index );
 
                         typeOfSearch = splitArray[ index - 1 ];
                         System.out.println( index );
-                        System.out.println( "**************" );
+                      //  System.out.println( "**************" );
                         // map.put( PdfToXlsxEnums.TYPE_OF_SEARCH.getKey(), splitArray[ index - 1 ] );
                     } else if ( line.contains( PdfToXlsxEnums.JURIST_FILING_OFFICE.getKey() ) ) {
                         jurisFillingOffice = splitArray[ index - 1 ];
